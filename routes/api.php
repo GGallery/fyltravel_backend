@@ -19,4 +19,5 @@ Route::get('/user', function (Request $request) {
 
 Route::group(['middleware'=>'cors'], function (){
   Route::resource('book','BookController');
+  Route::resource('travels','TravelController');
 });
