@@ -17,7 +17,36 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
+
+
+//Route::post('/signup', [
+//    'uses' => 'UserController@signup'
+//]);
+//
+//Route::post('/signin', [
+//    'uses' => 'UserController@signin'
+//]);
+
+
+//Route::get('travels', [
+//    'uses' => 'TravelController@index'
+//    , 'middleware' => 'auth.jwt'
+//]);
+
+//
 Route::group(['middleware'=>'cors'], function (){
   Route::resource('book','BookController');
-  Route::resource('travels','TravelController');
+  Route::get('travels', [
+      'uses' => 'TravelController@index',
+      'middleware' => 'auth.jwt'
+  ]);
+
+    Route::post('/signup', [
+        'uses' => 'UserController@signup'
+    ]);
+
+    Route::post('/signin', [
+        'uses' => 'UserController@signin'
+    ]);
+
 });
