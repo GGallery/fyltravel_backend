@@ -34,7 +34,9 @@ Route::get('/user', function (Request $request) {
 //]);
 
 //
-Route::group(['middleware'=>'cors'], function (){
+
+
+// Route::group(['middleware'=>'cors'], function (){
   Route::resource('book','BookController');
   Route::get('travels', [
       'uses' => 'TravelController@index',
@@ -48,5 +50,4 @@ Route::group(['middleware'=>'cors'], function (){
     Route::post('/signin', [
         'uses' => 'UserController@signin'
     ]);
-
-});
+// });
