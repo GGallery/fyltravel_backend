@@ -38,10 +38,16 @@ Route::get('/user', function (Request $request) {
 
 // Route::group(['middleware'=>'cors'], function (){
   Route::resource('book','BookController');
-  Route::get('travels', [
+
+
+    Route::get('user_travels', [
       'uses' => 'TravelController@index',
       'middleware' => 'auth.jwt'
-  ]);
+    ]);
+
+    Route::get('travels', [
+      'uses' => 'TravelController@index'
+    ]);
 
     Route::post('/signup', [
         'uses' => 'UserController@signup'
