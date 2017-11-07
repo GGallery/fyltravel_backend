@@ -19,41 +19,29 @@ Route::get('/user', function (Request $request) {
 
 
 
-//Route::post('/signup', [
-//    'uses' => 'UserController@signup'
-//]);
-//
-//Route::post('/signin', [
-//    'uses' => 'UserController@signin'
-//]);
-
-
-//Route::get('travels', [
-//    'uses' => 'TravelController@index'
-//    , 'middleware' => 'auth.jwt'
-//]);
-
-//
-
-
 // Route::group(['middleware'=>'cors'], function (){
-  Route::resource('book','BookController');
+Route::resource('book','BookController');
 
 
-    Route::get('user_travels', [
-      'uses' => 'TravelController@index',
-      'middleware' => 'auth.jwt'
-    ]);
+Route::get('user_travels', [
+    'uses' => 'TravelController@index',
+    'middleware' => 'auth.jwt'
+]);
 
-    Route::get('travels', [
-      'uses' => 'TravelController@index'
-    ]);
+Route::post('newtravel', [
+    'uses' => 'TravelController@store',
+    'middleware' => 'auth.jwt'
+]);
 
-    Route::post('/signup', [
-        'uses' => 'UserController@signup'
-    ]);
+Route::get('travels', [
+    'uses' => 'TravelController@index'
+]);
 
-    Route::post('/signin', [
-        'uses' => 'UserController@signin'
-    ]);
+Route::post('/signup', [
+    'uses' => 'UserController@signup'
+]);
+
+Route::post('/signin', [
+    'uses' => 'UserController@signin'
+]);
 // });
