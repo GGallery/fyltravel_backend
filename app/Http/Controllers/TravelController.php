@@ -27,17 +27,41 @@ class TravelController extends Controller
         return response()->json($travels);
     }
 
+
+
+    /**
+     * Display a listing of the user travel.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function userTravels(Request $request)
+    {
+
+        if(!$token= $request->input('token')){
+            return response()->json(['messge' => 'Token non valido'],404);
+        }
+
+        $user = JWTAuth::toUser($token);
+        $travels = Travel::with('tappe', 'user')->where('author' , $user->id)->get();
+
+        return response()->json($travels);
+    }
+
+
     public function store(Request $request)
     {
-//        if(! $user = JWTAuth::parseToken()->authenticate()){
-//            return response()->json(['messge' => 'User Not found'],404);
-//        }
+
+        if(!$token= $request->input('token')){
+            return response()->json(['messge' => 'Token non valido'],404);
+        }
+
+        $user = JWTAuth::toUser($token);
 
         $travel= new Travel();
 
         $travel->title = $request->input('title');
         $travel->description = $request->input('description');
-        $travel->author = 1;
+        $travel->author = $user->id;
         $travel->publish = 1;
 
         $travel->save();

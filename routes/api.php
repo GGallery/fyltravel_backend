@@ -37,6 +37,10 @@ Route::get('travels', [
     'uses' => 'TravelController@index'
 ]);
 
+Route::get('userTravels', [
+    'uses' => 'TravelController@userTravels'
+]);
+
 Route::post('/signup', [
     'uses' => 'UserController@signup'
 ]);

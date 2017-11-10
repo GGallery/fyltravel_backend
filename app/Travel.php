@@ -11,4 +11,9 @@ class Travel extends Model
 
         return $this->belongsTo('App\User', 'author');
     }
+
+     public function tappe() {
+
+        return $this->HasMany('App\tappe', 'id_travel');
+    }
 }
