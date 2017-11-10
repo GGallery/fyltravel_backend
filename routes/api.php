@@ -23,8 +23,8 @@ Route::get('/user', function (Request $request) {
 Route::resource('book','BookController');
 
 
-Route::get('user_travels', [
-    'uses' => 'TravelController@index',
+Route::get('userTravels', [
+    'uses' => 'TravelController@userTravels',
     'middleware' => 'auth.jwt'
 ]);
 
@@ -33,13 +33,33 @@ Route::post('newtravel', [
     'middleware' => 'auth.jwt'
 ]);
 
-Route::get('travels', [
-    'uses' => 'TravelController@index'
+Route::post('get_travel', [
+    'uses' => 'TravelController@get_travel',
+    'middleware' => 'auth.jwt'
 ]);
 
-Route::get('userTravels', [
-    'uses' => 'TravelController@userTravels'
+
+Route::post('get_tappe', [
+    'uses' => 'TappeController@get_tappe',
+    'middleware' => 'auth.jwt'
 ]);
+
+Route::post('set_tappe', [
+    'uses' => 'TappeController@set_tappe',
+    'middleware' => 'auth.jwt'
+]);
+
+
+Route::post('updatetravelimage', [
+    'uses' => 'TravelController@update_travel_image'
+]);
+
+
+Route::post('upload_copertina', [
+    'uses' => 'TravelController@upload_copertina'
+]);
+
+
 
 Route::post('/signup', [
     'uses' => 'UserController@signup'
