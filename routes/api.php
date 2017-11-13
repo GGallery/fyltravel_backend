@@ -50,13 +50,16 @@ Route::post('set_tappe', [
 ]);
 
 
-Route::post('updatetravelimage', [
-    'uses' => 'TravelController@update_travel_image'
+
+
+Route::post('upload_cover', [
+    'uses' => 'TravelController@upload_cover'
 ]);
 
 
-Route::post('upload_copertina', [
-    'uses' => 'TravelController@upload_copertina'
+Route::post('upload_media', [
+    'uses' => 'TravelController@upload_media'
+
 ]);
 
 

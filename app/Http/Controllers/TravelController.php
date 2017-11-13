@@ -10,6 +10,8 @@ use Debugbar;
 use JWTAuth;
 use Image;
 
+use Illuminate\Support\Facades\Storage;
+
 class TravelController extends Controller
 {
 
@@ -28,14 +30,14 @@ class TravelController extends Controller
 
 
 
-/**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function get_travel(Request $request)
     {
-        
+
         $travel_id = $request->input('travel_id');
 
         $obj = Travel::find($travel_id);
@@ -61,7 +63,7 @@ class TravelController extends Controller
 
     public function store(Request $request)
     {
-        
+
         $user = JWTAuth::parseToken()->authenticate();
 
         $travel= new Travel();
@@ -75,13 +77,25 @@ class TravelController extends Controller
         return response()->json($travel);
     }
 
-    public function upload_copertina(Request $request){
-        if($request->hasFile("file")) {   
-            $avatar = $request->file("file");
-            $filename = time().uniqid() . "." . $avatar->getClientOriginalExtension();
+    public function upload_cover(Request $request){
+        $travel_id = $request->input('travel_id');
+        $current_cover = $request->input('current_cover');
+
+        if($request->hasFile("file")) {
+            $newcover = $request->file("file");
+            $filename = time().uniqid() . "." . $newcover->getClientOriginalExtension();
             //Image::make($avatar)->fit(900)->save(public_path("/media/travel/" . $filename));
-            Image::make($avatar)->save(public_path("/media/travel/" . $filename));
-            return response()->json(['file' => $filename, 'message' => "Image add correctly"], 200);
+            if(Image::make($newcover)->save(public_path("/media/_t/" . $filename)))
+            {
+                $obj= Travel::find($travel_id);
+                $obj->cover = $request->input('image');
+                $obj->save();
+
+                $path = public_path("/media/_t/" . $current_cover);
+                $del = Storage::exists($path);
+
+                return response()->json(['path' => $path, 'del' => $del, 'file' => $filename, 'message' => "Immagine aggiunta correttamente e cancellata la vecchia"], 200);
+            }
         }
         return response()->json(['message' => "Error_setAvatar: No file provided !"], 404);
     }
@@ -100,7 +114,27 @@ class TravelController extends Controller
     }
 
 
- 
+
+
+
+    public function upload_media(Request $request){
+
+        $travel_id = $request->input('travel_id');
+        if($request->hasFile("file")) {
+            $avatar = $request->file("file");
+            $filename = time().uniqid() . "." . $avatar->getClientOriginalExtension();
+            //Image::make($avatar)->fit(900)->save(public_path("/media/travel/" . $filename));
+            Image::make($avatar)->save(public_path("/media/_i/". $travel_id. "/".$filename));
+            return response()->json(['travel_id' => $travel_id, 'file' => $filename, 'message' => "Image add correctly"], 200);
+        }
+        return response()->json(['message' => "Error_setAvatar: No file provided !"], 404);
+    }
+
+
+
+
+
+
 //39,3998718	-8,2244539
 //6,4237499	-66,5897293
 //40,7134247	-74,0055237
