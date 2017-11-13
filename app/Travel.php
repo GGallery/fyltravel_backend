@@ -16,4 +16,9 @@ class Travel extends Model
 
         return $this->HasMany('App\tappe', 'id_travel');
     }
+
+    public function images() {
+
+        return $this->HasMany('App\travels_image', 'id_travel');
+    }
 }
