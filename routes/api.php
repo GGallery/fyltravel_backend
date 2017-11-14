@@ -39,8 +39,8 @@ Route::post('get_travel', [
 ]);
 
 Route::post('get_images', [
-    'uses' => 'TravelController@get_images',
-    'middleware' => 'auth.jwt'
+    'uses' => 'TravelController@get_images'
+    
 ]);
 
 Route::post('get_tappe', [

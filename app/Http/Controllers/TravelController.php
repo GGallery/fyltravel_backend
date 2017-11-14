@@ -99,7 +99,11 @@ class TravelController extends Controller
 
         $filename = time().uniqid() . "." . $file->getClientOriginalExtension();
 
-        if(Image::make($file)->save(public_path("/storage/_i/" . $filename)))
+        $small  = Image::make($file)->fit(50)->save(public_path("/storage/_i/small/" . $filename));
+        $medium = Image::make($file)->fit(200)->save(public_path("/storage/_i/medium/" . $filename));
+        $big    = Image::make($file)->save(public_path("/storage/_i/big/" . $filename));
+
+        if($big)
         {
             $obj= new travel_image();
             $obj->filename = $filename;
