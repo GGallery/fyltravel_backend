@@ -20,12 +20,9 @@ class TravelController extends Controller
      */
     public function index()
     {
-
-
         $travels = Travel::with('user')->get();
         return response()->json($travels);
     }
-
 
 
     /**
@@ -35,11 +32,8 @@ class TravelController extends Controller
      */
     public function get_travel(Request $request)
     {
-
         $travel_id = $request->input('travel_id');
-
         $obj = Travel::find($travel_id);
-
         return response()->json($obj    );
     }
 
@@ -51,12 +45,25 @@ class TravelController extends Controller
      */
     public function userTravels(Request $request)
     {
-
         $user = JWTAuth::parseToken()->authenticate();
         $travels = Travel::with('tappe', 'user')->where('author' , $user->id)->get();
-
         return response()->json($travels);
     }
+
+
+   /**
+     * Count  user travel.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function countTravel(Request $request)
+    {
+        $user = JWTAuth::parseToken()->authenticate();
+        $count = Travel::with('tappe')->where('author' , $user->id)->get()->count();
+        return response()->json($count);
+    }
+
+
 
 
     public function store(Request $request)

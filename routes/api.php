@@ -19,60 +19,36 @@ Route::get('/user', function (Request $request) {
 
 
 
-// Route::group(['middleware'=>'cors'], function (){
+//Route::group(['middleware'=>'auth.jwt'], function (){
+
 Route::resource('book','BookController');
 
 
-Route::get('userTravels', [
-    'uses' => 'TravelController@userTravels',
-    'middleware' => 'auth.jwt'
-]);
+Route::get('userTravels',   ['uses' => 'TravelController@userTravels' ]);
 
-Route::post('newtravel', [
-    'uses' => 'TravelController@store',
-    'middleware' => 'auth.jwt'
-]);
+Route::post('newtravel',    ['uses' => 'TravelController@store' ]);
 
-Route::post('get_travel', [
-    'uses' => 'TravelController@get_travel',
-    'middleware' => 'auth.jwt'
-]);
+Route::post('get_travel',   ['uses' => 'TravelController@get_travel' ]);
 
-Route::post('get_images', [
-    'uses' => 'TravelController@get_images'
-    
-]);
+Route::post('get_images',   ['uses' => 'TravelController@get_images' ]);
 
-Route::post('get_tappe', [
-    'uses' => 'TappeController@get_tappe',
-    'middleware' => 'auth.jwt'
-]);
+Route::post('get_tappe',    ['uses' => 'TappeController@get_tappe' ]);
 
-Route::post('set_tappe', [
-    'uses' => 'TappeController@set_tappe',
-    'middleware' => 'auth.jwt'
-]);
+Route::post('set_tappe',    ['uses' => 'TappeController@set_tappe' ]);
+
+Route::post('upload_cover', ['uses' => 'TravelController@upload_cover' ]);
+
+Route::post('upload_media', ['uses' => 'TravelController@upload_media' ]);
 
 
 
 
-Route::post('upload_cover', [
-    'uses' => 'TravelController@upload_cover'
-]);
 
+//}
 
-Route::post('upload_media', [
-    'uses' => 'TravelController@upload_media'
+Route::post('get_CountTravel',     ['uses' => 'TravelController@countTravel' ]);
 
-]);
+ Route::post('/signup',     ['uses' => 'UserController@signup' ]);
 
-
-
-Route::post('/signup', [
-    'uses' => 'UserController@signup'
-]);
-
-Route::post('/signin', [
-    'uses' => 'UserController@signin'
-]);
+Route::post('/signin',      ['uses' => 'UserController@signin' ]);
 // });
