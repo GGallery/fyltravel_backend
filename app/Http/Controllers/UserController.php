@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Namshi\JOSE\JWT;
 use JWTException;
 use JWTAuth;
+use Image;
 
 class UserController extends Controller
 {
@@ -19,13 +20,25 @@ class UserController extends Controller
             'password' => 'required'
         ]);
 
+        $filename='empty.jpg';
+        if($request->input('image')) {
+            $filename = time() . uniqid() . ".jpg";
+            Image::make($request->input('image'))->fit(200)->save(public_path("/storage/_p/big/" . $filename));
+        }
+
         $user = new User([
             'name' => $request->input('name'),
+            'uid' => time().uniqid(),
             'email' => $request->input('email'),
-            'password' => bcrypt($request->input('password'))
+            'password' => bcrypt($request->input('password')),
+            'provider' => $request->input('provider'),
+            'image' => $filename
         ]);
 
         $user->save();
+
+
+
 
         return response()->json([
             'message' => 'Utente creato correttamente'
@@ -40,10 +53,10 @@ class UserController extends Controller
         ]);
 
         $credential = $request->only('email' , 'password');
-        
+
         try{
             if ( !$token = JWTAuth::attempt($credential)){
-                    return response()->json(['error' => 'Credenziali non valide'], 401);
+                return response()->json(['error' => 'Credenziali non valide'], 401);
             }
         }
         catch (JWTException $e){
@@ -58,5 +71,13 @@ class UserController extends Controller
         ], 200 );
     }
 
-    //
+    public function get_userInfo(Request $request){
+
+        $uid = $request->input('uid');
+        $user = \App\User::where('uid', $uid)->first();
+        $obj = \App\User::with('tipology')->find($user->id);
+        return response()->json($obj);
+
+
+    }
 }

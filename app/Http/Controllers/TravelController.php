@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Travel;
 use App\travel_image;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use JWTAuth;
@@ -34,7 +35,20 @@ class TravelController extends Controller
     {
         $travel_id = $request->input('travel_id');
         $obj = Travel::find($travel_id);
-        return response()->json($obj    );
+        return response()->json($obj);
+    }
+
+    /**
+     * Display a listing of best travel  resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function get_best_travel(Request $request)
+    {
+        $uid = $request->input('uid');
+        $user = \App\User::where('uid', $uid)->first();
+        $obj = Travel::where('author', $user->id)->orderBy('rate', 'desc')->take($request->input('amount'))->get();
+        return response()->json($obj);
     }
 
 
@@ -45,20 +59,22 @@ class TravelController extends Controller
      */
     public function userTravels(Request $request)
     {
-        $user = JWTAuth::parseToken()->authenticate();
+        $uid = $request->input('uid');
+        $user = \App\User::where('uid', $uid)->first();
         $travels = Travel::with('tappe', 'user')->where('author' , $user->id)->get();
         return response()->json($travels);
     }
 
 
-   /**
+    /**
      * Count  user travel.
      *
      * @return \Illuminate\Http\Response
      */
     public function countTravel(Request $request)
     {
-        $user = JWTAuth::parseToken()->authenticate();
+        $uid = $request->input('uid');
+        $user = \App\User::where('uid', $uid)->first();
         $count = Travel::with('tappe')->where('author' , $user->id)->get()->count();
         return response()->json($count);
     }
