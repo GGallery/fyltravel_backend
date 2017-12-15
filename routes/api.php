@@ -34,6 +34,7 @@ Route::resource('book','BookController');
 Route::post('userTravels',   ['uses' => 'TravelController@userTravels' ]);
 
 Route::post('newtravel',    ['uses' => 'TravelController@store' ]);
+Route::post('updatetravel',    ['uses' => 'TravelController@update' ]);
 
 Route::post('get_travel',   ['uses' => 'TravelController@get_travel' ]);
 
@@ -41,7 +42,11 @@ Route::post('get_best_travel',   ['uses' => 'TravelController@get_best_travel' ]
 
 Route::post('get_images',   ['uses' => 'TravelController@get_images' ]);
 
-Route::post('get_tappe',    ['uses' => 'TappeController@get_tappe' ]);
+Route::post('get_scopi',   ['uses' => 'TravelController@get_scopi' ]);
+
+Route::post('get_keywords',   ['uses' => 'TravelController@get_keywords' ]);
+
+Route::post('get_consigliatoa',   ['uses' => 'TravelController@get_consigliatoa' ]);
 
 Route::post('set_tappe',    ['uses' => 'TappeController@set_tappe' ]);
 
