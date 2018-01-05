@@ -77,6 +77,26 @@ class TravelController extends Controller
         return response()->json($obj);
     }
 
+    public function get_starred_travel(Request $request)
+    {
+        $obj = Travel::with('user')
+            ->orderBy('rate', 'desc')
+            ->take($request->input('amount'), 6)
+            ->get();
+        return response()->json($obj);
+    }
+
+    public function get_latest_travel(Request $request)
+    {
+        $obj = Travel::with('user')
+            ->orderBy('rate', 'desc')
+            ->take($request->input('amount'), 6)
+            ->get();
+        return response()->json($obj);
+    }
+
+
+
 
     /**
      * Display a listing of the user travel.
@@ -88,6 +108,24 @@ class TravelController extends Controller
         $uid = $request->input('uid');
         $user = \App\User::where('uid', $uid)->first();
         $travels = Travel::with('tappe', 'user', 'scopo', 'keywords', 'consigliatoa')->where('author' , $user->id)->get();
+        return response()->json($travels);
+    }
+
+
+    /**
+     * Display a listing of the user travel.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+
+        if(!$search)
+            return response()->json();
+
+        $travels = Travel::with('tappe', 'user', 'scopo', 'keywords', 'consigliatoa')->where('title','like','%'.$search.'%')->get();
+
         return response()->json($travels);
     }
 
@@ -131,23 +169,20 @@ class TravelController extends Controller
         $travel->title= $request->input('title');
         $travel->description= $request->input('description');
         $travel->shortdescription= $request->input('shortdescription');
+        $travel->hashtag = $request->input('hashtag');
         $travel->rate= $request->input('rate');
         $travel->publish= $request->input('publish');
 
 
-//        $travel->scopi= $request->input('scopi');
-//        $travel->keywords= $request->input('keywords');
-//        $travel->consigliatoa= $request->input('consigliatoa');
+        $travel->scopo()->sync((array)$request->input('scopi'));
+        $travel->keywords()->sync((array)$request->input('keywords'));
+        $travel->consigliatoa()->sync((array)$request->input('consigliatoa'));
 
         $travel->save();
 
         return response()->json('success');
 
-
     }
-
-
-
 
     public function upload_cover(Request $request){
         $travel_id = $request->input('travel_id');
@@ -155,7 +190,8 @@ class TravelController extends Controller
         $file = $request->file("file");
 
         $filename = time().uniqid() . "." . $file->getClientOriginalExtension();
-        if(Image::make($file)->save(public_path("/storage/_t/" . $filename)))
+        Image::make($file)->save(public_path("/storage/_t/big/" . $filename));
+        if(Image::make($file)->fit(400)->save(public_path("/storage/_t/cover/" . $filename)))
         {
             $obj= Travel::find($travel_id);
             $obj->cover = $filename;
@@ -191,10 +227,33 @@ class TravelController extends Controller
         return response()->json(['message' => "Error_setAvatar: No file provided !"], 404);
     }
 
+    public function upload_video(Request $request){
+        $travel_id = $request->input('travel_id');
+        $file = $request->file("file");
+
+        $filename = time().uniqid() . ".mp4" . $file->getClientOriginalExtension();
+        $path = public_path("/storage/_v/" );
+
+        if($file->move($path, $filename))
+        {
+            $obj= Travel::find($travel_id);
+            $obj->video = $filename;
+            $obj->save();
+
+            return response()->json(['file' => $filename, 'message' => "Video aggiunta correttamente "], 200);
+        }
+
+        return response()->json(['message' => "Error_setAvatar: No file provided !"], 404);
+    }
+
     public function get_images(Request $request){
         $travel_id = $request->input('travel_id');
         $obj = travel_image::where('id_travel',$travel_id)->get();
         return response()->json($obj);
     }
+
+
+
+
 
 }

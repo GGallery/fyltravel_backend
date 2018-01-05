@@ -80,4 +80,23 @@ class UserController extends Controller
 
 
     }
+
+
+    public function upload_profile_image(Request $request){
+
+        $uid = $request->input('uid');
+        $file = $request->file("file");
+
+        $filename = time().uniqid() . "." . $file->getClientOriginalExtension();
+        if(Image::make($file)->fit(300)->save(public_path("/storage/_p/big/" . $filename)))
+        {
+            $obj= \App\User::where('uid', $uid)->first();
+            $obj->image = $filename;
+            $obj->save();
+
+            return response()->json(['file' => $filename, 'message' => "Immagine aggiunta correttamente"], 200);
+        }
+        return response()->json(['message' => "Error_setAvatar: No file provided !"], 404);
+    }
+
 }
