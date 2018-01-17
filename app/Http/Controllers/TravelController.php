@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Itinerari;
 use App\Travel;
 use App\travel_consigliatoa;
 use App\travel_image;
@@ -109,6 +110,20 @@ class TravelController extends Controller
         $user = \App\User::where('uid', $uid)->first();
         $travels = Travel::with('tappe', 'user', 'scopo', 'keywords', 'consigliatoa')->where('author' , $user->id)->get();
         return response()->json($travels);
+    }
+
+
+    /**
+     * Display a listing of the user itinerari.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function userItinerari(Request $request)
+    {
+        $uid = $request->input('uid');
+        $user = \App\User::where('uid', $uid)->first();
+        $itinerari = Itinerari::with('travels')->where('author' , $user->id)->get();
+        return response()->json($itinerari);
     }
 
 

@@ -27,7 +27,14 @@ Route::group(['middleware'=>'auth.jwt'], function () {
 
 Route::post('userTravels',   ['uses' => 'TravelController@userTravels' ]);
 
+Route::post('userItinerari',   ['uses' => 'TravelController@userItinerari' ]);
+
+
+
+
 Route::post('newtravel',    ['uses' => 'TravelController@store' ]);
+
+Route::post('updatetravel',    ['uses' => 'TravelController@update' ]);
 
 Route::post('updatetravel',    ['uses' => 'TravelController@update' ]);
 
