@@ -12,4 +12,7 @@ class Itinerari extends Model
         return $this->belongsToMany('App\Travel', 'itinerari_travel_map', 'id_itinerario', 'id_travel');
     }
 
+//    TODO
+//  AGGIUNGERE IMMAGINE
+
 }

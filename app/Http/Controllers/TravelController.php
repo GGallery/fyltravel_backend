@@ -113,6 +113,8 @@ class TravelController extends Controller
     }
 
 
+
+
     /**
      * Display a listing of the user itinerari.
      *
