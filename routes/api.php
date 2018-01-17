@@ -29,9 +29,6 @@ Route::post('userTravels',   ['uses' => 'TravelController@userTravels' ]);
 
 Route::post('userItinerari',   ['uses' => 'TravelController@userItinerari' ]);
 
-
-
-
 Route::post('newtravel',    ['uses' => 'TravelController@store' ]);
 
 Route::post('updatetravel',    ['uses' => 'TravelController@update' ]);
@@ -47,7 +44,6 @@ Route::post('get_best_travel',   ['uses' => 'TravelController@get_best_travel' ]
 Route::post('get_latest_travel',   ['uses' => 'TravelController@get_latest_travel' ]);
 
 Route::post('get_starred_travel',   ['uses' => 'TravelController@get_starred_travel' ]);
-
 
 Route::post('get_images',   ['uses' => 'TravelController@get_images' ]);
 
